@@ -14,7 +14,7 @@ public class Session {
 
 	public Session(String name) {
 		this.controller = Controller.getInstance();
-		if(connect(name) == null){
+		if (connect(name) == null) {
 			createUser(name);
 		}
 		folder = user.home();
@@ -40,13 +40,13 @@ public class Session {
 	public Folder createFolder(String name, Folder folder) {
 		folder = (folder == null) ? user.home() : folder;
 		Folder newFolder = new Folder(name, folder, user);
-		user.addElement(newFolder);
+		user.add(newFolder);
 		return newFolder;
 	}
 
 	public Document createDocument(File name, Folder folder) {
 		Document newDocument = new Document(name, folder, user);
-		user.addElement(newDocument);
+		user.add(newDocument);
 		return newDocument;
 	}
 
@@ -70,5 +70,8 @@ public class Session {
 		this.folder = folder;
 	}
 
+	public void remove(Element element) {
+		user.remove(element);
+	}
 
 }

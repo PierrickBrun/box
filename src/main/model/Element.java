@@ -52,5 +52,9 @@ public abstract class Element {
 	public Folder parent() {
 		return this.parent;
 	}
+	
+	public void remove(){
+		parent.remove(this);
+	}
 
 }

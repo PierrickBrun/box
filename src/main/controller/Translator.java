@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Set;
 
+import model.Document;
 import model.Element;
 import model.Folder;
 
@@ -15,14 +16,14 @@ public class Translator {
 
 	public String translate(String string) {
 		int separator = string.indexOf(" ");
-		String args = string.substring(separator+1, string.length());
+		String args = string.substring(separator + 1, string.length());
 		if (string.startsWith("ls ")) {
 			String[] folders = args.split("/");
-			Folder folder = navigate(folders);
+			Folder folder = (Folder) navigate(folders);
 			return drawLs(folder);
 		} else if (string.startsWith("cd ")) {
 			String[] folders = args.split("/");
-			Folder folder = navigate(folders);
+			Folder folder = (Folder) navigate(folders);
 			session.setFolder(folder);
 			return drawLs(folder);
 		} else if (string.startsWith("mkdir ")) {
@@ -31,10 +32,16 @@ public class Translator {
 
 			String path = args.substring(separator + 1);
 			String[] folders = path.split("/");
-			Folder parent = navigate(folders);
+			Folder parent = (Folder) navigate(folders);
 			Folder newFolder = session.createFolder(name, parent);
 
 			return newFolder.path() + newFolder.name();
+		} else if (string.startsWith("rm ")) {
+			String[] folders = args.split("/");
+			Element element = navigate(folders);
+			Folder parent = element.parent();
+			session.remove(element);
+			return parent.path() + parent.name();
 		}
 		return null;
 	}
@@ -48,13 +55,20 @@ public class Translator {
 		return result;
 	}
 
-	private Folder navigate(String[] folders) {
-		Folder folder = session.folder();
-		for (String folderName : folders) {
-			folder = (folder != null && Folder.contains(folder, folderName)) ? (Folder) folder.getChild(folderName)
-					: null;
+	private Element navigate(String[] elements) {
+		Element element = session.folder();
+		for (String elementName : elements) {
+			if (element instanceof Folder) {
+				Folder folder = (Folder) element;
+				element = folder.contains(elementName) ? folder.getChild(elementName) : folder;
+				if (element.equals(folder)) {
+					return element;
+				}
+			} else if (element instanceof Document) {
+				return element;
+			}
 		}
-		return folder;
+		return element;
 	}
 
 }

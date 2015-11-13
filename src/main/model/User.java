@@ -10,7 +10,7 @@ public class User {
 
 	public User(String name) {
 		this.name = name;
-		this.addElement(new Folder("home", null, this));
+		this.add(new Folder("home", null, this));
 	}
 
 	public Folder home() {
@@ -30,8 +30,13 @@ public class User {
 		return elements;
 	}
 
-	public void addElement(Element element) {
+	public void add(Element element) {
 		elements.add(element);
+	}
+	
+	public void remove(Element element){
+		element.remove();
+		elements.remove(element);
 	}
 
 }

@@ -5,8 +5,8 @@ import java.util.Set;
 
 public class Folder extends Element {
 	
-	public static boolean contains(Folder folder,String elementName){
-		if (folder.getChild(elementName) != null){
+	public boolean contains(String elementName){
+		if (getChild(elementName) != null){
 			return true;
 		}
 		return false;

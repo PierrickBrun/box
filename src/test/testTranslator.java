@@ -1,3 +1,4 @@
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,14 @@ public class testTranslator {
 		String folderPath = translator.translate("mkdir test3 test1/test2");
 
 		Assert.assertEquals("home/test1/test2/test3", folderPath);
+	}
+
+	@Test
+	public void testRm() {
+		String folder = translator.translate("rm test1/test2");
+
+		Assert.assertEquals("home/test1", folder);
+		Assert.assertEquals("", translator.translate("ls test1/"));
 	}
 
 }

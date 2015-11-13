@@ -7,7 +7,7 @@ import model.User;
 
 public class Controller {
 
-	private static Controller INSTANCE = new Controller();
+	private static final Controller INSTANCE = new Controller();
 
 	static Controller getInstance() {
 		return INSTANCE;
