@@ -66,5 +66,9 @@ public class Session {
 		return folder.getChildren();
 	}
 
+	public void setFolder(Folder folder) {
+		this.folder = folder;
+	}
+
 
 }

@@ -28,7 +28,7 @@ public abstract class Element {
 	}
 
 	public String toString() {
-		return this.name;
+		return this.admin + ":" + this.name;
 	}
 
 	public Set<User> guests() {

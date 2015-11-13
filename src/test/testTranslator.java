@@ -14,17 +14,31 @@ public class testTranslator {
 
 	@Before
 	public void init() {
-		translator = new Translator("test");
 		session = new Session("test");
+		translator = new Translator(session);
 		folder1 = session.createFolder("test1", null);
 		session.createFolder("test2", folder1);
 	}
 
 	@Test
 	public void testLs() {
-		String test = translator.translate("ls test1/");
+		String test = translator.translate("ls test1");
 
 		Assert.assertEquals("test2\t", test);
+	}
+
+	@Test
+	public void testCd() {
+		translator.translate("cd test1");
+
+		Assert.assertEquals(folder1.name(), session.folder().name());
+	}
+
+	@Test
+	public void testMkdir() {
+		String folderPath = translator.translate("mkdir test3 test1/test2");
+
+		Assert.assertEquals("home/test1/test2/test3", folderPath);
 	}
 
 }
