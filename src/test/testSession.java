@@ -1,6 +1,6 @@
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,8 +57,8 @@ public class testSession {
 	public void testLs() {
 		Folder folder = session.createFolder("test1",null);
 		
-		Map<String,Element> list = new HashMap<String,Element>();
-		list.put("test1",folder);
+		Set<Element> list = new HashSet<Element>();
+		list.add(folder);
 		
 		Assert.assertEquals(list, session.ls());
 	}
@@ -67,7 +67,7 @@ public class testSession {
 	public void testCd() {
 		Folder folder = session.createFolder("test1",null);
 		
-		Assert.assertEquals(null, session.folder());
+		Assert.assertEquals("home", session.folder().name());
 		
 		session.cd(folder);
 		

@@ -39,9 +39,9 @@ public class testFolder {
 		File testFile = new File("E:/tech/putty.exe");
 		Document doc = session.createDocument(testFile,folder2);
 		
-		Assert.assertEquals("", folder.path());
-		Assert.assertEquals("test/", folder2.path());
-		Assert.assertEquals("test/test2/", doc.path());
+		Assert.assertEquals("home/", folder.path());
+		Assert.assertEquals("home/test/", folder2.path());
+		Assert.assertEquals("home/test/test2/", doc.path());
 	}
 
 }

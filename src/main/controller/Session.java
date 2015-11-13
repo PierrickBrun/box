@@ -1,8 +1,7 @@
 package controller;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 import model.Document;
 import model.Element;
@@ -18,9 +17,10 @@ public class Session {
 		if(connect(name) == null){
 			createUser(name);
 		}
+		folder = user.home();
 	}
 
-	private Folder folder = null;
+	private Folder folder;
 	private User user;
 
 	public User createUser(String name) {
@@ -38,6 +38,7 @@ public class Session {
 	}
 
 	public Folder createFolder(String name, Folder folder) {
+		folder = (folder == null) ? user.home() : folder;
 		Folder newFolder = new Folder(name, folder, user);
 		user.addElement(newFolder);
 		return newFolder;
@@ -49,13 +50,8 @@ public class Session {
 		return newDocument;
 	}
 
-	public Map<String,Element> ls() {
-		Map<String,Element> list = new HashMap<String,Element>();
-		for(Element element : user.elements()){
-			Element elementFromFolder = (folder == element.parent()) ? element : null;
-			list.put(elementFromFolder.name(),elementFromFolder);
-		}
-		return list;
+	public Set<Element> ls() {
+		return ls(folder);
 	}
 
 	public Folder folder() {
@@ -64,6 +60,10 @@ public class Session {
 
 	public void cd(Folder folder) {
 		this.folder = folder;
+	}
+
+	public Set<Element> ls(Folder folder) {
+		return folder.getChildren();
 	}
 
 

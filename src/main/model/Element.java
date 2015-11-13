@@ -14,6 +14,9 @@ public abstract class Element {
 		this.name = name;
 		this.parent = parent;
 		this.admin = admin;
+		if (parent != null) {
+			parent.add(this);
+		}
 	}
 
 	public boolean isAdmin(User user) {
@@ -21,6 +24,10 @@ public abstract class Element {
 	}
 
 	public String name() {
+		return this.name;
+	}
+
+	public String toString() {
 		return this.name;
 	}
 

@@ -10,6 +10,16 @@ public class User {
 
 	public User(String name) {
 		this.name = name;
+		this.addElement(new Folder("home", null, this));
+	}
+
+	public Folder home() {
+		for (Element element : elements) {
+			if ("home".equals(element.name())) {
+				return (Folder) element;
+			}
+		}
+		return null;
 	}
 
 	public String name() {
