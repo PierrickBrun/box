@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.util.Set;
 
 import model.Document;
@@ -18,32 +19,68 @@ public class Translator {
 		int separator = string.indexOf(" ");
 		String args = string.substring(separator + 1, string.length());
 		if (string.startsWith("ls ")) {
-			String[] folders = args.split("/");
-			Folder folder = (Folder) navigate(folders);
-			return drawLs(folder);
+			return ls(args);
 		} else if (string.startsWith("cd ")) {
-			String[] folders = args.split("/");
-			Folder folder = (Folder) navigate(folders);
-			session.setFolder(folder);
-			return drawLs(folder);
+			return cd(args);
 		} else if (string.startsWith("mkdir ")) {
-			separator = args.indexOf(" ");
-			String name = args.substring(0, separator);
-
-			String path = args.substring(separator + 1);
-			String[] folders = path.split("/");
-			Folder parent = (Folder) navigate(folders);
-			Folder newFolder = session.createFolder(name, parent);
-
-			return newFolder.path() + newFolder.name();
+			return mkdir(args);
 		} else if (string.startsWith("rm ")) {
-			String[] folders = args.split("/");
-			Element element = navigate(folders);
-			Folder parent = element.parent();
-			session.remove(element);
-			return parent.path() + parent.name();
+			return rm(args);
+		} else if (string.startsWith("touch ")) {
+			return touch(args);
 		}
 		return null;
+	}
+
+	private String touch(String args) {
+		int separator;
+		separator = args.indexOf(" ");
+		String boxPath = args.substring(0, separator);
+
+		String localPath = args.substring(separator + 1);
+
+		String[] boxFolders = boxPath.split("/");
+		Folder parent = (Folder) navigate(boxFolders);
+
+		File file = new File(localPath);
+
+		Document newDocument = session.createDocument(file, parent);
+
+		return newDocument.path() + newDocument.name() + "." + newDocument.type();
+	}
+
+	private String rm(String args) {
+		String[] folders = args.split("/");
+		Element element = navigate(folders);
+		Folder parent = element.parent();
+		session.remove(element);
+		return parent.path() + parent.name();
+	}
+
+	private String mkdir(String args) {
+		int separator;
+		separator = args.indexOf(" ");
+		String name = args.substring(0, separator);
+
+		String path = args.substring(separator + 1);
+		String[] folders = path.split("/");
+		Folder parent = (Folder) navigate(folders);
+		Folder newFolder = session.createFolder(name, parent);
+
+		return newFolder.path() + newFolder.name();
+	}
+
+	private String cd(String args) {
+		String[] folders = args.split("/");
+		Folder folder = (Folder) navigate(folders);
+		session.setFolder(folder);
+		return drawLs(folder);
+	}
+
+	private String ls(String args) {
+		String[] folders = args.split("/");
+		Folder folder = (Folder) navigate(folders);
+		return drawLs(folder);
 	}
 
 	private String drawLs(Folder folder) {

@@ -49,5 +49,12 @@ public class testTranslator {
 		Assert.assertEquals("home/test1", folder);
 		Assert.assertEquals("", translator.translate("ls test1/"));
 	}
+	
+	@Test
+	public void testTouch(){
+		String file = translator.translate("touch test1/test2 E:/tech/putty.exe");
+		
+		Assert.assertEquals("home/test1/test2/putty.exe", file);
+	}
 
 }
