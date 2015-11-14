@@ -13,27 +13,30 @@ import model.Folder;
 
 public class testSession {
 
-	private Session session;
 
 	@Before
 	public void init() {
-		session = new Session("test");
+		//pas de création de session ici
+		//le controller étant un singleton il y a des conflits dans les tests
 	}
 
 	@Test
 	public void testCreateUser() {
-		session.connect("test");
-		Assert.assertEquals("test", session.user().name());
+		Session session = new Session("testCreateUser");
+		session.connect("testCreateUser");
+		Assert.assertEquals("testCreateUser", session.user().name());
 	}
 
 	@Test
 	public void testConnect() {
+		Session session = new Session("testConnect");
 		session.createUser("test2");
 		Assert.assertEquals("test2", session.user().name());
 	}
 
 	@Test
 	public void testCreateFolder() {
+		Session session = new Session("testCreateFolder");
 		Folder testFolder = session.createFolder("test", null);
 
 		Assert.assertEquals("test", testFolder.name());
@@ -41,6 +44,7 @@ public class testSession {
 
 	@Test
 	public void testCreateDocument() {
+		Session session = new Session("testCreateDocument");
 		File testFile = new File("E:/tech/putty.exe");
 		Document doc = session.createDocument(testFile, null);
 
@@ -51,6 +55,7 @@ public class testSession {
 
 	@Test
 	public void testLs() {
+		Session session = new Session("testLs");
 		Folder folder = session.createFolder("test1", null);
 
 		Set<Element> list = new HashSet<Element>();
@@ -61,6 +66,7 @@ public class testSession {
 
 	@Test
 	public void testCd() {
+		Session session = new Session("testCd");
 		Folder folder = session.createFolder("test1", null);
 
 		Assert.assertEquals("home", session.folder().name());

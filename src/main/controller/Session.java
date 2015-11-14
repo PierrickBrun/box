@@ -33,7 +33,7 @@ public class Session {
 	}
 
 	public User connect(String name) {
-		user = controller.getUser(name);
+		user = controller.getUser(name) != null ? controller.getUser(name) : user;
 		return user;
 	}
 

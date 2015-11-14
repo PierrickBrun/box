@@ -12,9 +12,9 @@ public abstract class Element {
 
 	public Element(String name, Folder parent, User admin) {
 		this.name = name;
-		this.parent = parent;
 		this.admin = admin;
 		if (parent != null) {
+			this.parent = parent;
 			parent.add(this);
 		}
 	}
@@ -52,8 +52,8 @@ public abstract class Element {
 	public Folder parent() {
 		return this.parent;
 	}
-	
-	public void remove(){
+
+	public void remove() {
 		parent.remove(this);
 	}
 

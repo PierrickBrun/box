@@ -9,13 +9,16 @@ public class Controller {
 
 	private static final Controller INSTANCE = new Controller();
 
-	static Controller getInstance() {
+	public static Controller getInstance() {
 		return INSTANCE;
 	}
 
-	private Map<String,User> users = new HashMap<String,User>();
-	
-	User createUser(String name){
+	private Controller() {
+	}
+
+	private Map<String, User> users = new HashMap<String, User>();
+
+	User createUser(String name) {
 		User user = new User(name);
 		users.put(name, user);
 		return user;
