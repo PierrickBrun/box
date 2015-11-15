@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import model.Document;
@@ -15,7 +16,7 @@ public class Translator {
 		this.session = session;
 	}
 
-	public String translate(String string) {
+	public Set<Element> translate(String string) {
 		int separator = string.indexOf(" ");
 		String args = string.substring(separator + 1, string.length());
 		if (string.startsWith("ls ")) {
@@ -32,7 +33,7 @@ public class Translator {
 		return null;
 	}
 
-	private String touch(String args) {
+	private Set<Element> touch(String args) {
 		int separator;
 		separator = args.indexOf(" ");
 		String boxPath = args.substring(0, separator);
@@ -46,18 +47,18 @@ public class Translator {
 
 		Document newDocument = session.createDocument(file, parent);
 
-		return newDocument.path() + newDocument.name() + "." + newDocument.type();
+		return encapsulate(newDocument);
 	}
 
-	private String rm(String args) {
+	private Set<Element> rm(String args) {
 		String[] folders = args.split("/");
 		Element element = navigate(folders);
 		Folder parent = element.parent();
 		session.remove(element);
-		return parent.path() + parent.name();
+		return encapsulate(parent);
 	}
 
-	private String mkdir(String args) {
+	private Set<Element> mkdir(String args) {
 		int separator;
 		separator = args.indexOf(" ");
 		String name = args.substring(0, separator);
@@ -66,23 +67,33 @@ public class Translator {
 		String[] folders = path.split("/");
 		Folder parent = (Folder) navigate(folders);
 		Folder newFolder = session.createFolder(name, parent);
-
-		return newFolder.path() + newFolder.name();
+		
+		return encapsulate(newFolder);
+		
 	}
 
-	private String cd(String args) {
+	private Set<Element> encapsulate(Element element) {
+		Set<Element> resultSet = new HashSet<Element>();
+		resultSet.add(element);
+		return resultSet;
+	}
+
+	private Set<Element> cd(String args) {
 		String[] folders = args.split("/");
 		Folder folder = (Folder) navigate(folders);
 		session.setFolder(folder);
-		return drawLs(folder);
+		return session.ls(folder);
 	}
 
-	private String ls(String args) {
+	private Set<Element> ls(String args) {
 		String[] folders = args.split("/");
 		Folder folder = (Folder) navigate(folders);
-		return drawLs(folder);
+		return session.ls(folder);
 	}
 
+	/*
+	 * TODO : mettre dans vue
+	 */
 	private String drawLs(Folder folder) {
 		String result = "";
 		Set<Element> elements = session.ls(folder);

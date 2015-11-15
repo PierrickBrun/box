@@ -1,10 +1,14 @@
 
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import controller.Session;
 import controller.Translator;
+import model.Document;
+import model.Element;
 import model.Folder;
 
 public class testTranslator {
@@ -23,9 +27,9 @@ public class testTranslator {
 
 	@Test
 	public void testLs() {
-		String test = translator.translate("ls test1");
+		Set<Element> test = translator.translate("ls test1");
 
-		Assert.assertEquals("test2\t", test);
+		Assert.assertEquals(1, test.size());
 	}
 
 	@Test
@@ -37,24 +41,36 @@ public class testTranslator {
 
 	@Test
 	public void testMkdir() {
-		String folderPath = translator.translate("mkdir test3 test1/test2");
-
-		Assert.assertEquals("home/test1/test2/test3", folderPath);
+		Set<Element> elements = translator.translate("mkdir test3 test1/test2");
+		Element newElement = null;
+		for (Element element : elements) {
+			newElement = element;
+		}
+		Assert.assertEquals("home/test1/test2/test3", newElement.path() + newElement.name());
 	}
 
 	@Test
 	public void testRm() {
-		String folder = translator.translate("rm test1/test2");
+		Set<Element> elements = translator.translate("rm test1/test2");
 
-		Assert.assertEquals("home/test1", folder);
-		Assert.assertEquals("", translator.translate("ls test1/"));
+		Element newElement = null;
+		for (Element element : elements) {
+			newElement = element;
+		}
+		Assert.assertEquals("home/test1", newElement.path() + newElement.name());
+		Assert.assertEquals(0, translator.translate("ls test1/").size());
 	}
-	
+
 	@Test
-	public void testTouch(){
-		String file = translator.translate("touch test1/test2 E:/tech/putty.exe");
-		
-		Assert.assertEquals("home/test1/test2/putty.exe", file);
+	public void testTouch() {
+		Set<Element> elements = translator.translate("touch test1/test2 E:/tech/putty.exe");
+
+		Element newElement = null;
+		for (Element element : elements) {
+			newElement = element;
+		}
+		Assert.assertEquals("home/test1/test2/putty.exe",
+				newElement.path() + newElement.name() + "." + ((Document) newElement).type());
 	}
 
 }
