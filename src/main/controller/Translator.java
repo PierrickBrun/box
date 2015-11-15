@@ -67,9 +67,9 @@ public class Translator {
 		String[] folders = path.split("/");
 		Folder parent = (Folder) navigate(folders);
 		Folder newFolder = session.createFolder(name, parent);
-		
+
 		return encapsulate(newFolder);
-		
+
 	}
 
 	private Set<Element> encapsulate(Element element) {
@@ -89,18 +89,6 @@ public class Translator {
 		String[] folders = args.split("/");
 		Folder folder = (Folder) navigate(folders);
 		return session.ls(folder);
-	}
-
-	/*
-	 * TODO : mettre dans vue
-	 */
-	private String drawLs(Folder folder) {
-		String result = "";
-		Set<Element> elements = session.ls(folder);
-		for (Element elem : elements) {
-			result += elem.name() + "\t";
-		}
-		return result;
 	}
 
 	private Element navigate(String[] elements) {
