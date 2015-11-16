@@ -1,9 +1,11 @@
-package controller;
+package view;
 
 import java.io.InputStream;
 import java.util.Scanner;
 import java.util.Set;
 
+import controller.Session;
+import controller.Translator;
 import model.Element;
 
 public class Menu {
