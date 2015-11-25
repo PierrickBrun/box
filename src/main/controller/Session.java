@@ -44,8 +44,8 @@ public class Session {
 		return newFolder;
 	}
 
-	public Document createDocument(File name, Folder folder) {
-		Document newDocument = new Document(name, folder, user);
+	public Document createDocument(File file, Folder folder) {
+		Document newDocument = new Document(file, folder, user);
 		user.add(newDocument);
 		return newDocument;
 	}

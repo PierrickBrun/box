@@ -23,7 +23,7 @@ public class testTranslator {
 		session = new Session("userTest");
 		translator = new Translator(session);
 		folder1 = session.createFolder("test1", null);
-		Folder folder2 = session.createFolder("test2", folder1);
+		session.createFolder("test2", folder1);
 	}
 
 	@Test
@@ -73,6 +73,15 @@ public class testTranslator {
 		Assert.assertEquals("home/test1/test2/putty.exe",
 				newElement.path() + newElement.name() + "." + ((Document) newElement).type());
 	}
+	
+	@Test
+	public void testRmDocument() {
+		translator.translate("touch E:/tech/putty.exe test1");
+		
+		translator.translate("rm test1/putty");
+
+		Assert.assertEquals(1,session.ls(folder1).size());
+	}
 
 	@Test
 	public void testShare() {
@@ -93,6 +102,20 @@ public class testTranslator {
 
 		Assert.assertEquals(session2.user(), newGuest);
 
+	}
+	
+	@Test
+	public void testListDocs() {
+		session.createUser("testListDocs");
+		session.connect("testListDocs");
+		
+		translator.translate("touch E:/tech/putty.exe test1");
+		translator.translate("touch E:/tech/putty.exe test1/test2");
+		Set<Element> elements = translator.translate("listdocs");
+		
+		System.out.println(elements);
+		
+		Assert.assertEquals(2,elements.size());
 	}
 
 }

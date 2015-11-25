@@ -22,13 +22,13 @@ public abstract class Element {
 	public boolean isAdmin(User user) {
 		return user == admin;
 	}
+	
+	public String toString(){
+		return this.admin.name() + this.name();
+	}
 
 	public String name() {
 		return this.name;
-	}
-
-	public String toString() {
-		return this.admin + ":" + this.name;
 	}
 
 	public Set<User> guests() {

@@ -28,7 +28,7 @@ public class Menu {
 				System.out.println(draw(elements));
 			}
 			System.out.println(
-					"ls path | cd path | mkdir name [path] | rmdir path | touch local_path [box_path] | share user [path]");
+					"ls path | cd path | mkdir name [path] | rmdir path | touch local_path [box_path] | share user [path] | listdocs");
 			System.out.print(session.folder().path() + session.folder().name() + ":");
 			input = scanner.nextLine();
 		}

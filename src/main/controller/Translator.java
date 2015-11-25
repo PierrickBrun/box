@@ -18,31 +18,43 @@ public class Translator {
 	}
 
 	public Set<Element> translate(String string) {
-		int separator = string.indexOf(" ");
-		String args = string.substring(separator + 1, string.length());
-		if (string.startsWith("ls ")) {
-			return ls(args);
-		} else if (string.startsWith("cd ")) {
-			return cd(args);
-		} else if (string.startsWith("mkdir ")) {
-			return mkdir(args);
-		} else if (string.startsWith("rm ")) {
-			return rm(args);
-		} else if (string.startsWith("touch ")) {
-			return touch(args);
-		} else if (string.startsWith("share ")) {
-			return share(args);
+		String[] argsArray = string.split(" ");
+		if (string.startsWith("ls")) {
+			return ls(argsArray);
+		} else if (string.startsWith("cd")) {
+			return cd(argsArray);
+		} else if (string.startsWith("mkdir")) {
+			return mkdir(argsArray);
+		} else if (string.startsWith("rm")) {
+			return rm(argsArray);
+		} else if (string.startsWith("touch")) {
+			return touch(argsArray);
+		} else if (string.startsWith("share")) {
+			return share(argsArray);
+		} else if (string.startsWith("listdocs")) {
+			return listDocs(argsArray);
 		}
 		return null;
 	}
 
-	private Set<Element> share(String args) {
-		Element element = session.folder();
-		String[] argArray = args.split(" ");
+	private Set<Element> listDocs(String[] argsArray) {
+		Set<Element> elements = session.user().elements();
+		Set<Element> docs = new HashSet<Element>();
+		for (Element elem : elements) {
+			if (elem instanceof Document) {
+				docs.add((Document) elem);
+			}
+		}
 
-		String userName = argArray[0];
-		if(argArray.length > 1){			
-			String elementPath = argArray[1];
+		return docs;
+	}
+
+	private Set<Element> share(String[] argsArray) {
+		Element element = session.folder();
+
+		String userName = argsArray[1];
+		if (argsArray.length > 2) {
+			String elementPath = argsArray[2];
 			String[] elements = elementPath.split("/");
 			element = navigate(elements);
 		}
@@ -55,14 +67,13 @@ public class Translator {
 		return encapsulate(element);
 	}
 
-	private Set<Element> touch(String args) {
+	private Set<Element> touch(String[] argsArray) {
 		Folder parent = session.folder();
-		String[] argArray = args.split(" ");
 
-		String localPath = argArray[0];
-		
-		if(argArray.length > 1){			
-			String boxPath = argArray[1];	
+		String localPath = argsArray[1];
+
+		if (argsArray.length > 2) {
+			String boxPath = argsArray[2];
 			String[] boxFolders = boxPath.split("/");
 			parent = (Folder) navigate(boxFolders);
 		}
@@ -74,21 +85,20 @@ public class Translator {
 		return encapsulate(newDocument);
 	}
 
-	private Set<Element> rm(String args) {
-		String[] folders = args.split("/");
+	private Set<Element> rm(String[] argsArray) {
+		String[] folders = argsArray[1].split("/");
 		Element element = navigate(folders);
 		Folder parent = element.parent();
 		session.remove(element);
 		return encapsulate(parent);
 	}
 
-	private Set<Element> mkdir(String args) {
+	private Set<Element> mkdir(String[] argsArray) {
 		Folder parent = (Folder) session.folder();
-		String[] argArray = args.split(" ");
-		String name = argArray[0];
+		String name = argsArray[1];
 
-		if (argArray.length > 1) {
-			String[] folders = argArray[1].split("/");
+		if (argsArray.length > 2) {
+			String[] folders = argsArray[2].split("/");
 			parent = (Folder) navigate(folders);
 		}
 		Folder newFolder = session.createFolder(name, parent);
@@ -103,16 +113,22 @@ public class Translator {
 		return resultSet;
 	}
 
-	private Set<Element> cd(String args) {
-		String[] folders = args.split("/");
-		Folder folder = (Folder) navigate(folders);
+	private Set<Element> cd(String[] argsArray) {
+		Folder folder = session.folder();
+		if (argsArray.length > 1) {
+			String[] folders = argsArray[1].split("/");
+			folder = (Folder) navigate(folders);
+		}
 		session.setFolder(folder);
-		return session.ls(folder);
+		return encapsulate(folder);
 	}
 
-	private Set<Element> ls(String args) {
-		String[] folders = args.split("/");
-		Folder folder = (Folder) navigate(folders);
+	private Set<Element> ls(String[] argsArray) {
+		Folder folder = session.folder();
+		if (argsArray.length > 1) {
+			String[] folders = argsArray[1].split("/");
+			folder = (Folder) navigate(folders);
+		}
 		return session.ls(folder);
 	}
 
