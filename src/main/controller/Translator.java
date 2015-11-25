@@ -7,6 +7,7 @@ import java.util.Set;
 import model.Document;
 import model.Element;
 import model.Folder;
+import model.User;
 
 public class Translator {
 
@@ -29,19 +30,42 @@ public class Translator {
 			return rm(args);
 		} else if (string.startsWith("touch ")) {
 			return touch(args);
+		} else if (string.startsWith("share ")) {
+			return share(args);
 		}
 		return null;
 	}
 
+	private Set<Element> share(String args) {
+		Element element = session.folder();
+		String[] argArray = args.split(" ");
+
+		String userName = argArray[0];
+		if(argArray.length > 1){			
+			String elementPath = argArray[1];
+			String[] elements = elementPath.split("/");
+			element = navigate(elements);
+		}
+
+		Controller controller = Controller.getInstance();
+		User user = controller.getUser(userName);
+
+		element.addGuest(user);
+
+		return encapsulate(element);
+	}
+
 	private Set<Element> touch(String args) {
-		int separator;
-		separator = args.indexOf(" ");
-		String boxPath = args.substring(0, separator);
+		Folder parent = session.folder();
+		String[] argArray = args.split(" ");
 
-		String localPath = args.substring(separator + 1);
-
-		String[] boxFolders = boxPath.split("/");
-		Folder parent = (Folder) navigate(boxFolders);
+		String localPath = argArray[0];
+		
+		if(argArray.length > 1){			
+			String boxPath = argArray[1];	
+			String[] boxFolders = boxPath.split("/");
+			parent = (Folder) navigate(boxFolders);
+		}
 
 		File file = new File(localPath);
 
@@ -59,13 +83,14 @@ public class Translator {
 	}
 
 	private Set<Element> mkdir(String args) {
-		int separator;
-		separator = args.indexOf(" ");
-		String name = args.substring(0, separator);
+		Folder parent = (Folder) session.folder();
+		String[] argArray = args.split(" ");
+		String name = argArray[0];
 
-		String path = args.substring(separator + 1);
-		String[] folders = path.split("/");
-		Folder parent = (Folder) navigate(folders);
+		if (argArray.length > 1) {
+			String[] folders = argArray[1].split("/");
+			parent = (Folder) navigate(folders);
+		}
 		Folder newFolder = session.createFolder(name, parent);
 
 		return encapsulate(newFolder);

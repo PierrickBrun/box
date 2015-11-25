@@ -10,6 +10,7 @@ import controller.Translator;
 import model.Document;
 import model.Element;
 import model.Folder;
+import model.User;
 
 public class testTranslator {
 
@@ -19,10 +20,10 @@ public class testTranslator {
 
 	@Before
 	public void init() {
-		session = new Session("test");
+		session = new Session("userTest");
 		translator = new Translator(session);
 		folder1 = session.createFolder("test1", null);
-		session.createFolder("test2", folder1);
+		Folder folder2 = session.createFolder("test2", folder1);
 	}
 
 	@Test
@@ -63,7 +64,7 @@ public class testTranslator {
 
 	@Test
 	public void testTouch() {
-		Set<Element> elements = translator.translate("touch test1/test2 E:/tech/putty.exe");
+		Set<Element> elements = translator.translate("touch E:/tech/putty.exe test1/test2");
 
 		Element newElement = null;
 		for (Element element : elements) {
@@ -71,6 +72,27 @@ public class testTranslator {
 		}
 		Assert.assertEquals("home/test1/test2/putty.exe",
 				newElement.path() + newElement.name() + "." + ((Document) newElement).type());
+	}
+
+	@Test
+	public void testShare() {
+		Session session2 = new Session("userTest2");
+
+		Set<Element> elements = translator.translate("share userTest2 test1/test2");
+		Element newElement = null;
+		for (Element element : elements) {
+			newElement = element;
+		}
+
+		Assert.assertEquals(1, newElement.guests().size());
+
+		User newGuest = null;
+		for (User guest : newElement.guests()) {
+			newGuest = guest;
+		}
+
+		Assert.assertEquals(session2.user(), newGuest);
+
 	}
 
 }

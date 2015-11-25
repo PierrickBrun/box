@@ -10,6 +10,7 @@ import controller.Session;
 import model.Document;
 import model.Element;
 import model.Folder;
+import model.User;
 
 public class testSession {
 
@@ -21,17 +22,17 @@ public class testSession {
 	}
 
 	@Test
-	public void testCreateUser() {
+	public void testConnect() {
 		Session session = new Session("testCreateUser");
 		session.connect("testCreateUser");
 		Assert.assertEquals("testCreateUser", session.user().name());
 	}
 
 	@Test
-	public void testConnect() {
+	public void testCreateUserConnect() {
 		Session session = new Session("testConnect");
-		session.createUser("test2");
-		Assert.assertEquals("test2", session.user().name());
+		User userTest2 = session.createUser("test2");
+		Assert.assertEquals("test2", userTest2.name());
 	}
 
 	@Test

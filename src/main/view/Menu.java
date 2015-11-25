@@ -27,15 +27,19 @@ public class Menu {
 				Set<Element> elements = translator.translate(input);
 				System.out.println(draw(elements));
 			}
-			System.out.println("ls [path] | cd [path] | mkdir | rmdir | touch");
+			System.out.println(
+					"ls path | cd path | mkdir name [path] | rmdir path | touch local_path [box_path] | share user [path]");
+			System.out.print(session.folder().path() + session.folder().name() + ":");
 			input = scanner.nextLine();
 		}
 	}
 
 	private String draw(Set<Element> elements) {
 		String result = "";
-		for (Element elem : elements) {
-			result += elem.name() + "\t";
+		if (elements != null) {
+			for (Element elem : elements) {
+				result += elem.name() + "\t";
+			}
 		}
 		return result;
 	}

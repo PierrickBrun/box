@@ -15,7 +15,7 @@ public class Session {
 	public Session(String name) {
 		this.controller = Controller.getInstance();
 		if (connect(name) == null) {
-			createUser(name);
+			user = createUser(name);
 		}
 		folder = user.home();
 	}
@@ -24,7 +24,7 @@ public class Session {
 	private User user;
 
 	public User createUser(String name) {
-		user = controller.createUser(name);
+		User user = controller.createUser(name);
 		return user;
 	}
 
