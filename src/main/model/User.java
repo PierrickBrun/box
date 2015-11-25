@@ -33,10 +33,12 @@ public class User {
 	public void add(Element element) {
 		elements.add(element);
 	}
-	
-	public void remove(Element element){
-		element.remove();
-		elements.remove(element);
+
+	public void remove(Element element) {
+		if (element.isAdmin(this)) {
+			element.remove();
+			elements.remove(element);
+		}
 	}
 
 }
