@@ -54,9 +54,7 @@ public class Translator {
 
 		String userName = argsArray[1];
 		if (argsArray.length > 2) {
-			String elementPath = argsArray[2];
-			String[] elements = elementPath.split("/");
-			element = navigate(elements);
+			element = navigate(argsArray[1]);
 		}
 
 		Controller controller = Controller.getInstance();
@@ -73,9 +71,7 @@ public class Translator {
 		String localPath = argsArray[1];
 
 		if (argsArray.length > 2) {
-			String boxPath = argsArray[2];
-			String[] boxFolders = boxPath.split("/");
-			parent = (Folder) navigate(boxFolders);
+			parent = (navigate(argsArray[2]) instanceof Folder) ? (Folder) navigate(argsArray[2]) : session.folder();
 		}
 
 		File file = new File(localPath);
@@ -98,8 +94,7 @@ public class Translator {
 		String name = argsArray[1];
 
 		if (argsArray.length > 2) {
-			String[] folders = argsArray[2].split("/");
-			parent = (Folder) navigate(folders);
+			parent = (navigate(argsArray[2]) instanceof Folder) ? (Folder) navigate(argsArray[2]) : session.folder();
 		}
 		Folder newFolder = session.createFolder(name, parent);
 
@@ -116,18 +111,22 @@ public class Translator {
 	private Set<Element> cd(String[] argsArray) {
 		Folder folder = session.folder();
 		if (argsArray.length > 1) {
-			String[] folders = argsArray[1].split("/");
-			folder = (Folder) navigate(folders);
+			folder = (navigate(argsArray[1]) instanceof Folder) ? (Folder) navigate(argsArray[1]) : session.folder();
 		}
 		session.setFolder(folder);
 		return encapsulate(folder);
 	}
 
+	private Element navigate(String path) {
+		String[] elements = path.split("/");
+		Element element = navigate(elements);
+		return element;
+	}
+
 	private Set<Element> ls(String[] argsArray) {
 		Folder folder = session.folder();
 		if (argsArray.length > 1) {
-			String[] folders = argsArray[1].split("/");
-			folder = (Folder) navigate(folders);
+			folder = (navigate(argsArray[1]) instanceof Folder) ? (Folder) navigate(argsArray[1]) : session.folder();
 		}
 		return session.ls(folder);
 	}
