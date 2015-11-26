@@ -9,9 +9,9 @@ public class testController {
 	@Test
 	public void testControllerCreateUser() {
 		Controller controller = Controller.getInstance();
-		User user = controller.createUser("Dick");
+		User user = controller.createUser("Jean-Christophe Moraud");
 
-		Assert.assertEquals(user, controller.getUser("Dick"));
+		Assert.assertEquals(user, controller.getUser("Jean-Christophe Moraud"));
 	}
 
 }

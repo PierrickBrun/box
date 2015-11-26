@@ -19,7 +19,7 @@ public class testElement {
 
 	@Before
 	public void init() {
-		session = new Session("test");
+		session = new Session("Christine Boutin");
 		element = session.createFolder("test", null);
 	}
 
@@ -27,7 +27,7 @@ public class testElement {
 	public void testIsAdmin() {
 		Assert.assertTrue(element.isAdmin(session.user()));
 
-		User user2 = session.createUser("test2");
+		User user2 = session.createUser("Patrick Balkany");
 		Assert.assertFalse(element.isAdmin(user2));
 	}
 
@@ -38,7 +38,7 @@ public class testElement {
 
 	@Test
 	public void testAddGuest() {
-		User userTest = session.createUser("test");
+		User userTest = session.createUser("Mohamed Sifaoui");
 		element.addGuest(userTest);
 
 		Set<User> assertSet = new HashSet<User>();

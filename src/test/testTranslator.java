@@ -19,7 +19,7 @@ public class testTranslator {
 
 	@Before
 	public void init() {
-		session = new Session("userTest");
+		session = new Session("Frederic Mitterand");
 		translator = new Translator(session);
 	}
 
