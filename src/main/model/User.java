@@ -15,7 +15,7 @@ public class User {
 
 	public Folder home() {
 		for (Element element : elements) {
-			if ("home".equals(element.name())) {
+			if (element.parent() == null) {
 				return (Folder) element;
 			}
 		}

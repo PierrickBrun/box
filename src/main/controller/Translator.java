@@ -54,7 +54,7 @@ public class Translator {
 
 		String userName = argsArray[1];
 		if (argsArray.length > 2) {
-			element = navigate(argsArray[1]);
+			element = navigate(argsArray[2]);
 		}
 
 		Controller controller = Controller.getInstance();
@@ -62,7 +62,7 @@ public class Translator {
 
 		element.addGuest(user);
 
-		return encapsulate(element);
+		return new HashSet<Element>();
 	}
 
 	private Set<Element> touch(String[] argsArray) {
@@ -76,17 +76,16 @@ public class Translator {
 
 		File file = new File(localPath);
 
-		Document newDocument = session.createDocument(file, parent);
+		session.createDocument(file, parent);
 
-		return encapsulate(newDocument);
+		return new HashSet<Element>();
 	}
 
 	private Set<Element> rm(String[] argsArray) {
 		String[] folders = argsArray[1].split("/");
 		Element element = navigate(folders);
-		Folder parent = element.parent();
 		session.remove(element);
-		return encapsulate(parent);
+		return new HashSet<Element>();
 	}
 
 	private Set<Element> mkdir(String[] argsArray) {
@@ -96,16 +95,9 @@ public class Translator {
 		if (argsArray.length > 2) {
 			parent = (navigate(argsArray[2]) instanceof Folder) ? (Folder) navigate(argsArray[2]) : session.folder();
 		}
-		Folder newFolder = session.createFolder(name, parent);
+		session.createFolder(name, parent);
 
-		return encapsulate(newFolder);
-
-	}
-
-	private Set<Element> encapsulate(Element element) {
-		Set<Element> resultSet = new HashSet<Element>();
-		resultSet.add(element);
-		return resultSet;
+		return new HashSet<Element>();
 	}
 
 	private Set<Element> cd(String[] argsArray) {
@@ -114,7 +106,7 @@ public class Translator {
 			folder = (navigate(argsArray[1]) instanceof Folder) ? (Folder) navigate(argsArray[1]) : session.folder();
 		}
 		session.setFolder(folder);
-		return encapsulate(folder);
+		return new HashSet<Element>();
 	}
 
 	private Element navigate(String path) {
@@ -134,14 +126,18 @@ public class Translator {
 	private Element navigate(String[] elements) {
 		Element element = session.folder();
 		for (String elementName : elements) {
-			if (element instanceof Folder) {
-				Folder folder = (Folder) element;
-				element = folder.contains(elementName) ? folder.getChild(elementName) : folder;
-				if (element.equals(folder)) {
+			if (elementName.equals("..")) {
+				element = element.parent();
+			} else {
+				if (element instanceof Folder) {
+					Folder folder = (Folder) element;
+					element = folder.contains(elementName) ? folder.getChild(elementName) : folder;
+					if (element.equals(folder)) {
+						return element;
+					}
+				} else if (element instanceof Document) {
 					return element;
 				}
-			} else if (element instanceof Document) {
-				return element;
 			}
 		}
 		return element;

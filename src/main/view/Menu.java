@@ -1,6 +1,7 @@
 package view;
 
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -25,12 +26,18 @@ public class Menu {
 				init();
 			} else {
 				Set<Element> elements = translator.translate(input);
-				System.out.println(draw(elements));
+				System.out.println("\n" + input + " : " + draw(elements));
 			}
+			System.out.println("________________________________________________________");
 			System.out.println(
 					"ls path | cd path | mkdir name [path] | rmdir path | touch local_path [box_path] | share user [path] | listdocs");
 			System.out.print(session.folder().path() + session.folder().name() + ":");
-			input = scanner.nextLine();
+			try {
+				input = scanner.nextLine();
+			} catch (NoSuchElementException e) {
+				System.out.println("\n\nfin de la démo");
+				return;
+			}
 		}
 	}
 

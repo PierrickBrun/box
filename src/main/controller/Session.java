@@ -16,8 +16,8 @@ public class Session {
 		this.controller = Controller.getInstance();
 		if (connect(name) == null) {
 			user = createUser(name);
+			folder = user.home();
 		}
-		folder = user.home();
 	}
 
 	private Folder folder;
@@ -34,6 +34,7 @@ public class Session {
 
 	public User connect(String name) {
 		user = controller.getUser(name) != null ? controller.getUser(name) : user;
+		folder = (user != null) ? user.home() : folder;
 		return user;
 	}
 
