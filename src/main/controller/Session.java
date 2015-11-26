@@ -64,7 +64,7 @@ public class Session {
 	}
 
 	public Set<Element> ls(Folder folder) {
-		return folder.getChildren();
+		return folder.children();
 	}
 
 	public void setFolder(Folder folder) {

@@ -18,13 +18,13 @@ public class Controller {
 
 	private Map<String, User> users = new HashMap<String, User>();
 
-	User createUser(String name) {
+	public User createUser(String name) {
 		User user = new User(name);
 		users.put(name, user);
 		return user;
 	}
 
-	User getUser(String name) {
+	public User getUser(String name) {
 		return users.get(name);
 	}
 

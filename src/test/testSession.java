@@ -14,11 +14,10 @@ import model.User;
 
 public class testSession {
 
-
 	@Before
 	public void init() {
-		//pas de création de session ici
-		//le controller étant un singleton il y a des conflits dans les tests
+		// pas de création de session ici
+		// le controller étant un singleton il y a des conflits dans les tests
 	}
 
 	@Test
@@ -29,7 +28,7 @@ public class testSession {
 	}
 
 	@Test
-	public void testCreateUserConnect() {
+	public void testCreateUser() {
 		Session session = new Session("testConnect");
 		User userTest2 = session.createUser("test2");
 		Assert.assertEquals("test2", userTest2.name());
@@ -75,6 +74,12 @@ public class testSession {
 		session.cd(folder);
 
 		Assert.assertEquals(folder, session.folder());
+	}
+
+	@Test
+	public void testFolder() {
+		Session session = new Session("testFolder");
+		Assert.assertEquals("home", session.folder().name());
 	}
 
 }

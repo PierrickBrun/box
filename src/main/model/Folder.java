@@ -18,7 +18,7 @@ public class Folder extends Element {
 		super(name, folder, admin);
 	}
 
-	public Set<Element> getChildren() {
+	public Set<Element> children() {
 		return children;
 	}
 
@@ -31,7 +31,7 @@ public class Folder extends Element {
 	}
 	
 	public Element getChild(String name){
-		for(Element element : getChildren()){
+		for(Element element : children()){
 			if(name.equals(element.name())){
 				return element;
 			}
