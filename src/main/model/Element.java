@@ -1,30 +1,41 @@
 package model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public abstract class Element {
 
 	protected String name;
 	protected Folder parent;
-	private Set<User> guests = new HashSet<User>();
-	private User admin;
+	private Map<User, Boolean> users = new HashMap<User, Boolean>();
 
 	public Element(String name, Folder parent, User admin) {
 		this.name = name;
-		this.admin = admin;
+		this.users.put(admin, true);
 		if (parent != null) {
 			this.parent = parent;
 			parent.add(this);
 		}
 	}
 
-	public boolean isAdmin(User user) {
-		return user == admin;
+	public User admin() {
+		for (Entry<User, Boolean> entry : users.entrySet()) {
+			if (entry.getValue() == true) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
-	
-	public String toString(){
-		return this.admin.name() + this.name();
+
+	public boolean isAdmin(User user) {
+		return user == admin();
+	}
+
+	public String toString() {
+		return this.admin().name() + this.name();
 	}
 
 	public String name() {
@@ -32,11 +43,17 @@ public abstract class Element {
 	}
 
 	public Set<User> guests() {
+		Set<User> guests = new HashSet<User>();
+		for (Entry<User, Boolean> entry : users.entrySet()) {
+			if (entry.getValue() == false) {
+				guests.add(entry.getKey());
+			}
+		}
 		return guests;
 	}
 
 	public void addGuest(User user) {
-		this.guests.add(user);
+		this.users.put(user, false);
 	}
 
 	public String path() {
