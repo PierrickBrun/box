@@ -20,6 +20,9 @@ public class Menu {
 		scanner = new Scanner(inputStream);
 	}
 
+	public Menu() {
+	}
+
 	public void main() {
 		while (!input.equals("quit")) {
 			if (input.equals("")) {
@@ -54,9 +57,13 @@ public class Menu {
 	private void init() {
 		System.out.println("Hi, who are you ?");
 		input = scanner.nextLine();
-		session = new Session(input);
+		session = new Session(input, this);
 		translator = new Translator(session);
 		System.out.println("Write one of the following to execute tasks :");
+	}
+
+	public void println(String string) {
+		System.out.println(string);
 	}
 
 }

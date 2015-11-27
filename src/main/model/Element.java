@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import controller.Controller;
+
 import java.util.Set;
 
 public abstract class Element {
@@ -54,6 +57,8 @@ public abstract class Element {
 
 	public void addGuest(User user) {
 		this.users.put(user, false);
+		Controller controller = Controller.getInstance();
+		controller.notify(user, this);
 	}
 
 	public String path() {

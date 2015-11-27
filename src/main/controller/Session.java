@@ -1,19 +1,35 @@
 package controller;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import model.Document;
 import model.Element;
 import model.Folder;
 import model.User;
+import view.Menu;
 
-public class Session {
+public class Session implements Observer {
 
 	private Controller controller;
+	private Menu menu;
+
+	public Session(String name, Menu menu) {
+		this.controller = Controller.getInstance();
+		controller.add(this);
+		this.menu = menu;
+		if (connect(name) == null) {
+			user = createUser(name);
+			folder = user.home();
+		}
+		this.menu = menu;
+	}
 
 	public Session(String name) {
 		this.controller = Controller.getInstance();
+		controller.add(this);
 		if (connect(name) == null) {
 			user = createUser(name);
 			folder = user.home();
@@ -73,6 +89,14 @@ public class Session {
 
 	public void remove(Element element) {
 		user.remove(element);
+	}
+
+	@Override
+	public void update(Observable observable, Object object) {
+		if (object instanceof Element) {
+			Element element = (Element) object;
+			menu.println("You've been granted guest on " + element.name() + " by " + element.admin().name());
+		}
 	}
 
 }

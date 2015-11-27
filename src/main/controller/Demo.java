@@ -8,7 +8,7 @@ public class Demo {
 
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
-		Session session = new Session("Christophe");
+		Session session = new Session("Christophe",new Menu());
 		
 		System.out.println("");
 		
