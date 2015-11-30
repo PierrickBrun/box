@@ -59,6 +59,16 @@ public abstract class Element {
 		this.users.put(user, false);
 		Controller controller = Controller.getInstance();
 		controller.notify(user, this);
+		if (this instanceof Folder) {
+			addGuestToChildren(user);
+		}
+	}
+
+	private void addGuestToChildren(User user) {
+		Folder thisFolder = (Folder) this;
+		for (Element child : thisFolder.children()) {
+			child.addGuest(user);
+		}
 	}
 
 	public String path() {

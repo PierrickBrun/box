@@ -39,11 +39,16 @@ public class testElement {
 	@Test
 	public void testAddGuest() {
 		User userTest = session.createUser("Mohamed Sifaoui");
+		Folder child = new Folder("son", (Folder) element, session.user());
+		Folder child2 = new Folder("son2", child, session.user());
 		element.addGuest(userTest);
 
 		Set<User> assertSet = new HashSet<User>();
 		assertSet.add(userTest);
 		Assert.assertEquals(assertSet, element.guests());
+
+		Assert.assertEquals(assertSet, child.guests());
+		Assert.assertEquals(assertSet, child2.guests());
 	}
 
 	@Test
