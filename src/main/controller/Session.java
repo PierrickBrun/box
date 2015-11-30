@@ -49,8 +49,11 @@ public class Session implements Observer {
 	}
 
 	public User connect(String name) {
-		user = controller.getUser(name) != null ? controller.getUser(name) : user;
-		folder = (user != null) ? user.home() : folder;
+		if (controller.getUser(name) != null) {
+			user = controller.getUser(name);
+			folder = user.home();
+			controller.connect(this);
+		}
 		return user;
 	}
 

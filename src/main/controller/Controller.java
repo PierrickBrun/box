@@ -47,4 +47,8 @@ public class Controller extends Observable {
 		deleteObservers();
 	}
 
+	public void connect(Session session) {
+		users.put(session.user(), session);
+	}
+
 }
