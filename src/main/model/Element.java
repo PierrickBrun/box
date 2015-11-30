@@ -56,7 +56,7 @@ public abstract class Element {
 	}
 
 	public void addGuest(User user) {
-		this.users.put(user, false);
+		users.put(user, false);
 		Controller controller = Controller.getInstance();
 		controller.notify(user, this);
 		if (this instanceof Folder) {

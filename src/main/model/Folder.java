@@ -5,6 +5,8 @@ import java.util.Set;
 
 public class Folder extends Element {
 	
+	private Set<Element> children = new HashSet<Element>();
+
 	public boolean contains(String elementName){
 		if (getChild(elementName) != null){
 			return true;
@@ -12,8 +14,6 @@ public class Folder extends Element {
 		return false;
 	}
 	
-	private Set<Element> children = new HashSet<Element>();
-
 	public Folder(String name, Folder folder, User admin) {
 		super(name, folder, admin);
 	}

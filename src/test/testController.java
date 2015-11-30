@@ -10,7 +10,7 @@ public class testController {
 	public void testControllerCreateUser() {
 		Controller controller = Controller.getInstance();
 		User user = controller.createUser("Jean-Christophe Moraud");
-
+		
 		Assert.assertEquals(user, controller.getUser("Jean-Christophe Moraud"));
 	}
 
